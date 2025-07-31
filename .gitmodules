@@ -1,0 +1,3 @@
+[submodule "src/susd"]
+	path = src/susd
+	url = https://github.com/rmxvrelease/susd.git
