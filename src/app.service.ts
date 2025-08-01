@@ -6,6 +6,7 @@ import {
   download_script_dir_path,
   get_csvs_dir_path as get_csv_storage_path,
   is_valid_state,
+  show_proj_structure,
   Data,
   get_csvs_dir_path,
 } from './utils';
@@ -15,6 +16,10 @@ import { MakeCsvDTO } from './app.controller';
 
 @Injectable()
 export class AppService {
+  debug() {
+    show_proj_structure();
+  }
+
   async deleteCsv(id: number) {
     const path_to_delete = join(get_csvs_dir_path(), `${id}`);
 

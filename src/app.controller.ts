@@ -63,6 +63,11 @@ export class AppController {
   deleteCsv(@Param('id') id: string) {
     return this.appService.deleteCsv(+id);
   }
+
+  @Get('debug')
+  debug() {
+    this.appService.debug();
+  }
 }
 
 export interface MakeCsvDTO {

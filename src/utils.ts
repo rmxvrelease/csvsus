@@ -1,5 +1,6 @@
 import path from 'node:path';
 import { existsSync, mkdirSync } from 'node:fs';
+import fs from 'node:fs';
 
 export class Data {
   month: number;
@@ -89,4 +90,16 @@ export function is_valid_state(state: string): boolean {
     'TO',
   ];
   return validStates.includes(state);
+}
+
+export function show_proj_structure() {
+  const curr_dir = __dirname;
+  for (const file of fs.readdirSync(curr_dir)) {
+    console.log(file);
+  }
+
+  const parent_dir = path.join(curr_dir, '..');
+  for (const file of fs.readdirSync(parent_dir)) {
+    console.log(file);
+  }
 }
