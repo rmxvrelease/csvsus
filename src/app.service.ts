@@ -7,15 +7,35 @@ import {
   get_csvs_dir_path as get_csv_storage_path,
   is_valid_state,
   Data,
+  get_csvs_dir_path,
 } from './utils';
 import { join } from 'node:path';
-import { cpSync } from 'fs';
+import fs from 'fs';
 import { MakeCsvDTO } from './app.controller';
 
 @Injectable()
 export class AppService {
-  downloadCsv(id: number, sistema: 'SIA' | 'SIH') {
-    throw new Error('Method not implemented.');
+  async deleteCsv(id: number) {
+    const path_to_delete = join(get_csvs_dir_path(), `${id}`);
+    try {
+      fs.rmSync(path_to_delete, { recursive: true });
+    } catch (error) {
+      console.error(`Error deleting CSV with ID ${id}:`, error);
+      throw new HttpException(
+        `Error deleting CSV with ID ${id}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+
+    return await this.prisma.csv.delete({ where: { id: id } });
+  }
+
+  downloadCsv(id: number, sistema: 'SIA' | 'SIH'): fs.ReadStream {
+    const csv_path = join(get_csv_storage_path(), `${id}`, `${sistema}.csv`);
+
+    const stream = fs.createReadStream(csv_path);
+
+    return stream;
   }
   constructor(private prisma: PrismaClient) {}
 
@@ -87,7 +107,7 @@ export class AppService {
     const generated_csv_dir = join(download_script_dir_path(), 'united_csv');
     const csv_storage_dir = join(get_csv_storage_path(), `${csv_id}`);
     try {
-      cpSync(generated_csv_dir, csv_storage_dir, { recursive: true });
+      fs.cpSync(generated_csv_dir, csv_storage_dir, { recursive: true });
     } catch {
       void this.csvMakeErrCallback(Error('Erro ao copiar CSV'), csv_id);
       return;

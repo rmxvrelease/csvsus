@@ -1,4 +1,13 @@
-import { Body, Get, Controller, Post, Param } from '@nestjs/common';
+import {
+  Body,
+  Get,
+  Controller,
+  Post,
+  Param,
+  Delete,
+  Res,
+} from '@nestjs/common';
+import express from 'express';
 import { AppService } from './app.service';
 
 @Controller()
@@ -16,19 +25,38 @@ export class AppController {
   }
 
   @Get('SIA:id')
-  downloadSIA(@Param('id') id: string) {
-    return this.appService.downloadCsv(+id, 'SIA');
+  downloadSIA(@Param('id') id: string, @Res() response: express.Response) {
+    const stream = this.appService.downloadCsv(+id, 'SIA');
+
+    response.set({
+      'Content-Type': 'text/csv',
+      'Content-Disposition': 'attachment;filename=amostra_PA.csv',
+    });
+
+    stream.pipe(response);
   }
 
   @Get('SIH:id')
-  downloadSIH(@Param('id') id: string) {
-    return this.appService.downloadCsv(+id, 'SIH');
+  downloadSIH(@Param('id') id: string, @Res() response: express.Response) {
+    const stream = this.appService.downloadCsv(+id, 'SIA');
+
+    response.set({
+      'Content-Type': 'text/csv',
+      'Content-Disposition': 'attachment;filename=amostra_PA.csv',
+    });
+
+    stream.pipe(response);
   }
 
   @Post('make_csv')
   makeCsv(@Body() dto: MakeCsvDTO) {
     const data = this.appService.makeCsv(dto);
     return data;
+  }
+
+  @Delete('csv:id')
+  deleteCsv(@Param('id') id: string) {
+    return this.appService.deleteCsv(+id);
   }
 }
 
