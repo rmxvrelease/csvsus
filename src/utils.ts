@@ -40,7 +40,7 @@ export class Data {
 
 export function download_script_path(): string {
   const curr_dir = __dirname;
-  return path.join(curr_dir, 'susd/main.py');
+  return path.join(curr_dir, '..', 'susd', 'main.py');
 }
 
 export function download_script_dir_path(): string {
