@@ -62,6 +62,8 @@ export class AppService {
   constructor(private prisma: PrismaClient) {}
 
   async makeCsv(dto: MakeCsvDTO) {
+    console.log(dto);
+
     const script_path = download_script_path();
     this.validateMakeCsvParams(dto);
 
@@ -115,6 +117,10 @@ export class AppService {
     return this.prisma.csv.findUnique({ where: { id } });
   }
 
+  async getCnesCsvs(cnes: string) {
+    return this.prisma.csv.findMany({ where: { cnes: cnes } });
+  }
+
   private async csvMakeErrCallback(error: Error, csv_id: number) {
     console.log('CSV creation failed');
     console.log(error);
@@ -158,7 +164,7 @@ export class AppService {
   }
 
   private validateMakeCsvParams(dto: MakeCsvDTO) {
-    if (dto.cnes.length != 7) {
+    if (dto.cnes.toString().length != 7) {
       console.log('CNES deve conter 7 caracteres');
       throw new HttpException(
         'CNES deve conter 7 caracteres',

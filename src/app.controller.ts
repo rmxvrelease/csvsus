@@ -14,6 +14,11 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
+  @Get('csvs_by_cnes:cnes')
+  getCsvsByCnes(@Param('cnes') cnes: string) {
+    return this.appService.getCnesCsvs(cnes);
+  }
+
   @Get('csvs')
   async getAllCsvs() {
     return this.appService.getAllCsvs();
@@ -30,7 +35,7 @@ export class AppController {
 
     response.set({
       'Content-Type': 'text/csv',
-      'Content-Disposition': 'attachment;filename=amostra_PA.csv',
+      'Content-Disposition': 'attachment;filename=SIA.csv',
     });
 
     stream.pipe(response);
@@ -42,7 +47,7 @@ export class AppController {
 
     response.set({
       'Content-Type': 'text/csv',
-      'Content-Disposition': 'attachment;filename=amostra_PA.csv',
+      'Content-Disposition': 'attachment;filename=SIH.csv',
     });
 
     stream.pipe(response);
