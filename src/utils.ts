@@ -45,7 +45,7 @@ export function download_script_path(): string {
 
 export function download_script_dir_path(): string {
   const curr_dir = __dirname;
-  return path.join(curr_dir, 'susd');
+  return path.join(curr_dir, '..', 'susd');
 }
 
 export function get_csvs_dir_path(): string {
