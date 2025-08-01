@@ -49,7 +49,7 @@ export function download_script_dir_path(): string {
 
 export function get_csvs_dir_path(): string {
   const curr_dir = __dirname;
-  const csvs_dir = path.join(curr_dir, 'csv');
+  const csvs_dir = path.join(curr_dir, '..', 'csv');
   const exists = existsSync(csvs_dir);
   if (exists) {
     return csvs_dir;

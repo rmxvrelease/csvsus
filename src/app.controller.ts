@@ -38,7 +38,7 @@ export class AppController {
 
   @Get('SIH:id')
   downloadSIH(@Param('id') id: string, @Res() response: express.Response) {
-    const stream = this.appService.downloadCsv(+id, 'SIA');
+    const stream = this.appService.downloadCsv(+id, 'SIH');
 
     response.set({
       'Content-Type': 'text/csv',

@@ -17,6 +17,11 @@ import { MakeCsvDTO } from './app.controller';
 export class AppService {
   async deleteCsv(id: number) {
     const path_to_delete = join(get_csvs_dir_path(), `${id}`);
+
+    if (!fs.existsSync(path_to_delete)) {
+      return await this.prisma.csv.delete({ where: { id: id } });
+    }
+
     try {
       fs.rmSync(path_to_delete, { recursive: true });
     } catch (error) {
@@ -32,6 +37,23 @@ export class AppService {
 
   downloadCsv(id: number, sistema: 'SIA' | 'SIH'): fs.ReadStream {
     const csv_path = join(get_csv_storage_path(), `${id}`, `${sistema}.csv`);
+
+    if (!fs.existsSync(csv_path)) {
+      console.error(`CSV with ID ${id} not found`);
+      const res = this.prisma.csv.delete({ where: { id: id } });
+      res
+        .then(() => {
+          console.log(`CSV with ID ${id} deleted`);
+        })
+        .catch(() => {
+          console.error(`Error deleting CSV with ID ${id}`);
+        });
+
+      throw new HttpException(
+        `CSV with ID ${id} not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
 
     const stream = fs.createReadStream(csv_path);
 
@@ -82,7 +104,7 @@ export class AppService {
       },
     );
 
-    return 'ok';
+    return csv;
   }
 
   async getAllCsvs() {
