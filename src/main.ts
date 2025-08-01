@@ -1,13 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { execSync } from 'node:child_process';
-import { cpSync, rmdirSync } from 'node:fs';
+import { cpSync } from 'node:fs';
 
 async function bootstrap() {
   try {
     execSync('git clone https://github.com/rmxvrelease/susd.git');
-    cpSync('./susd', '../susd', { recursive: true });
-    rmdirSync('./susd', { recursive: true });
+    cpSync('susd', '../susd');
   } catch {
     console.error('Failed to initialize submodules');
   }
