@@ -93,13 +93,21 @@ export function is_valid_state(state: string): boolean {
 }
 
 export function show_proj_structure() {
+  console.log('\nCURRENT WORKING DIRECTORY');
   const curr_dir = __dirname;
   for (const file of fs.readdirSync(curr_dir)) {
     console.log(file);
   }
 
+  console.log('\nPARENT DIRECTORY');
   const parent_dir = path.join(curr_dir, '..');
   for (const file of fs.readdirSync(parent_dir)) {
+    console.log(file);
+  }
+
+  console.log('\nPYTHON SCRIPT DIRECTORY');
+  const sus_d_dir = path.join(curr_dir, '..', 'susd');
+  for (const file of fs.readdirSync(sus_d_dir)) {
     console.log(file);
   }
 }
